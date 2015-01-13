@@ -23,7 +23,12 @@ infixr 1 _⊎_
 ⊤×⊤ = tt , tt
 
 -- ⊤ × ⊥ no elemenets
+no-⊤×⊥ : ⊤ × ⊥ → ⊥
+no-⊤×⊥ (x , ())
+
 -- ⊥ × ⊥ no elements
+no-⊥×⊥ : ⊥ × ⊥ → ⊥
+no-⊥×⊥ (() , x₁)
 
 ⊤⊎⊤ : ⊤ ⊎ ⊤
 ⊤⊎⊤ = inj₁ tt
@@ -32,6 +37,9 @@ infixr 1 _⊎_
 ⊤⊎⊥ = inj₁ tt
 
 -- ⊥ ⊎ ⊥ no elements
+no-⊥⊎⊥ : ⊥ ⊎ ⊥ → ⊥
+no-⊥⊎⊥ (inj₁ ())
+no-⊥⊎⊥ (inj₂ ())
 
 ex1 : ⊥ ⊎ ⊤ ⊎ ⊤ × (⊥ ⊎ ⊥) ⊎ ⊤
 ex1 = inj₂ (inj₁ tt)
@@ -56,7 +64,7 @@ infix 4 _≤_
 4≰2 (s≤s (s≤s ()))
 
 8≰4 : 8 ≤ 4 → ⊥
-8≰4 (s≤s x) = 7≰3 x
+8≰4 (s≤s (s≤s (s≤s (s≤s ()))))
 
 
 _+_ : ℕ → ℕ → ℕ
@@ -209,10 +217,10 @@ data _*_≡_ : ℕ → ℕ → ℕ → Set where
 0*3≡0 = mulz
 
 0*3≡1 : 0 * 3 ≡ 1 → ⊥
-0*3≡1 = λ ()
+0*3≡1 ()
 
 0*3≡8 : 0 * 3 ≡ 8 → ⊥
-0*3≡8 = λ ()
+0*3≡8 ()
 
 mp : {n : ℕ} → 3 + n ≡ (suc (suc (suc n)))
 mp = sns (sns (sns znn))
@@ -226,8 +234,8 @@ mp = sns (sns (sns znn))
 3*3≡9 : 3 * 3 ≡ 9
 3*3≡9 = muls mp 2*3≡6
 
--- 1*3≡1 : 1 * 3 ≡ 1 → ⊥
--- 1*3≡1 
+1*3≡1 : 1 * 3 ≡ 1 → ⊥
+1*3≡1 (muls (sns ()) x₁)
 
 data ℕ⁺ : Set where
   one : ℕ⁺
@@ -236,17 +244,12 @@ data ℕ⁺ : Set where
 
 data _≈_ : ℕ → ℕ⁺ → Set where
   eqone : (suc zero) ≈ one
-  eqdub1 : {n : ℕ} → n ≈ one → suc (suc n) ≈ double one
+  eqdub1 : {n : ℕ} → n ≈ one → suc n ≈ double one
   eqdub+1 : {n : ℕ} {m : ℕ⁺} → n ≈ double m → suc n ≈ double+1 m
   eqdubs : {n : ℕ} {m : ℕ⁺} → n ≈ double+1 m → suc n ≈ double (double m)
-  
 
+5is5 : 5 ≈ double+1 (double one)
+5is5 = eqdub+1 (eqdubs (eqdub+1 (eqdub1 eqone)))
 
--- 1 = 1
--- 2 = dub 1
--- 3 = dub+1 1
--- 4 = dub 2
--- 5 = dub+1 2
--- 6 = dub 3
--- 7 = dub+1 3
--- 8 = dub 4
+4not5 : 4 ≈ double+1 (double one) → ⊥
+4not5 (eqdub+1 (eqdubs (eqdub+1 (eqdub1 ()))))
