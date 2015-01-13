@@ -54,4 +54,54 @@ from-to zero = refl
 from-to (suc a) = cong suc (from-to a)
 
 to-from : ∀ a → toList (fromList a) ≡ a
-to-from a = {!!}
+to-from [] = refl
+to-from (x ∷ xs) = cong (_∷_ tt) (to-from xs)
+
+fromPreserves++ : ∀ (a b : List ⊤) → fromList (a ++ b) ≡ fromList a + fromList b
+fromPreserves++ [] b = refl
+fromPreserves++ (x ∷ a) b = cong suc (fromPreserves++ a b)
+
+toPreserves++ : ∀ (a b : ℕ) → toList (a + b) ≡ toList a ++ toList b
+toPreserves++ zero b = refl
+toPreserves++ (suc a) b = cong (_∷_ tt) (toPreserves++ a b)
+
+_≡⟨_⟩_ : ∀ {A : Set} (x : A) {y z : A} → x ≡ y → y ≡ z → x ≡ z
+x ≡⟨ refl ⟩ refl = refl
+
+infixr 2 _≡⟨_⟩_
+
+_∎ : ∀ {A : Set} (x : A) → x ≡ x
+x ∎ = refl
+
++-comm′ : (n m : ℕ) → n + m ≡ m + n
++-comm′ zero n = sym (+-right-identity n)
++-comm′ (suc m) n =
+    suc m + n
+  ≡⟨ refl ⟩
+    suc (m + n)
+  ≡⟨ cong suc (+-comm′ m n) ⟩
+    suc (n + m)
+  ≡⟨ sym (m+1+n≡1+m+n n m) ⟩
+    (n + suc m)
+  ∎
+
+distribʳ-*-+ : ∀ a b c → (a + b) * c ≡ a * c + b * c
+distribʳ-*-+ zero b c = refl
+distribʳ-*-+ (suc a) b c =
+    c + (a + b) * c
+  ≡⟨ cong (λ x → c + x) (distribʳ-*-+ a b c) ⟩
+    (c + (a * c + b * c))
+  ≡⟨ (+-assoc c (a * c) (b * c)) ⟩
+    (c + a * c + b * c)
+  ∎ 
+
+*-assoc : ∀ a b c → a * (b * c) ≡ (a * b) * c
+*-assoc zero b c = refl
+*-assoc (suc a) b c =
+    suc a * (b * c)
+  ≡⟨ refl ⟩
+    (1 + a) * (b * c)
+  ≡⟨ refl ⟩
+    {!!}
+  ≡⟨ {!!} ⟩
+    {!!}
