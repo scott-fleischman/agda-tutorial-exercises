@@ -36,7 +36,7 @@ total (suc m) (suc n) with total m n
 ≤′⇒≤ : ∀ {a b} → a ≤′ b → a ≤ b
 ≤′⇒≤ {zero} ≤′-refl = z≤n
 ≤′⇒≤ {suc a} ≤′-refl = s≤s (≤′⇒≤ {a} ≤′-refl)
-≤′⇒≤ (≤′-step r) = {!!}
+≤′⇒≤ (≤′-step r) = ≤-step (≤′⇒≤ r)
 
 z≤′n : ∀ n → zero ≤′ n
 z≤′n zero = ≤′-refl
@@ -44,4 +44,12 @@ z≤′n (suc n) = ≤′-step (z≤′n _)
 
 s≤′s : ∀ {m n} → m ≤′ n → suc m ≤′ suc n
 s≤′s ≤′-refl = ≤′-refl
-s≤′s (≤′-step r) = {!!}
+s≤′s (≤′-step r) = ≤′-step (s≤′s r)
+
+≤⇒≤′ : ∀ {a b} → a ≤ b → a ≤′ b
+≤⇒≤′ {b = b} z≤n = z≤′n b
+≤⇒≤′ (s≤s r) = s≤′s (≤⇒≤′ r)
+
+fin≤ : ∀ {n}(m : Fin n) → toℕ m < n
+fin≤ zero = s≤s z≤n
+fin≤ (suc m) = s≤s (fin≤ m)
