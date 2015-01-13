@@ -49,9 +49,9 @@ sub3b = s first (s first z (later first)) first
 nin1 : 1 ∈ [] → ⊥
 nin1 ()
 
-sub4a : 1 ∷ [] ⊆ []
-sub4a = s first z {!!}
+sub4a : 1 ∷ [] ⊆ [] → ⊥
+sub4a (s x x₁ ())
 
 sub4 : 1 ∷ 2 ∷ 3 ∷ [] ⊆ 1 ∷ 2 ∷ [] → ⊥
-sub4 = {!!}
+sub4 (s x (s x₁ (s x₂ x₃ (later (later ()))) x₅) x₆)
 
