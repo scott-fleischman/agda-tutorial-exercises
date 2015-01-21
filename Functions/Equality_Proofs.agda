@@ -98,10 +98,37 @@ distribʳ-*-+ (suc a) b c =
 *-assoc : ∀ a b c → a * (b * c) ≡ (a * b) * c
 *-assoc zero b c = refl
 *-assoc (suc a) b c =
-    suc a * (b * c)
-  ≡⟨ refl ⟩
-    (1 + a) * (b * c)
-  ≡⟨ refl ⟩
-    {!!}
+    (b * c + a * (b * c))
   ≡⟨ {!!} ⟩
-    {!!}
+    ((b + a * b) * c)
+  ∎
+
+*-left-identity : ∀ a → 1 * a ≡ a
+*-left-identity zero = refl
+*-left-identity (suc a) = cong suc (*-left-identity a)
+
+*-right-identity : ∀ a → a * 1 ≡ a
+*-right-identity zero = refl
+*-right-identity (suc a) = cong suc (*-right-identity a)
+
+n*0≡0 : ∀ n → n * 0 ≡ 0
+n*0≡0 zero = refl
+n*0≡0 (suc n) = n*0≡0 n
+
+*-suc : ∀ n m → n + n * m ≡ n * suc m
+*-suc zero m = refl
+*-suc (suc n) m with *-suc n m
+… | r₁ with cong (λ x → m + x) r₁
+… | r₂ with +-assoc m n (n * m)
+… | r₃ = cong suc {!!}
+
+
+module trySemiringSolver where
+
+open import Data.Nat
+open import Data.Nat.Properties
+open SemiringSolver
+open import Relation.Binary.PropositionalEquality renaming (_≡_ to _≡-official_)
+
+f : ∀ a b c → a + b * c + 1 ≡-official 1 + c * b + a
+f = solve 3 (λ a b c → a :+ b :* c :+ con 1 := con 1 :+ c :* b :+ a) refl
