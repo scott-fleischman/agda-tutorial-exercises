@@ -99,7 +99,9 @@ distribʳ-*-+ (suc a) b c =
 *-assoc zero b c = refl
 *-assoc (suc a) b c =
     (b * c + a * (b * c))
-  ≡⟨ {!!} ⟩
+  ≡⟨ cong (λ x → b * c + x) (*-assoc a b c) ⟩
+    ((b * c + (a * b) * c))
+  ≡⟨ sym (distribʳ-*-+ b (a * b) c) ⟩
     ((b + a * b) * c)
   ∎
 
@@ -117,10 +119,13 @@ n*0≡0 (suc n) = n*0≡0 n
 
 *-suc : ∀ n m → n + n * m ≡ n * suc m
 *-suc zero m = refl
-*-suc (suc n) m with *-suc n m
-… | r₁ with cong (λ x → m + x) r₁
-… | r₂ with +-assoc m n (n * m)
-… | r₃ = cong suc {!!}
+*-suc (suc n) m = cong suc {!!}
+
+*-comm : ∀ m n → m * n ≡ n * m
+*-comm zero zero = refl
+*-comm zero (suc n) = sym (n*0≡0 n)
+*-comm (suc m) zero = n*0≡0 m
+*-comm (suc m) (suc n) = cong suc {!!}
 
 
 module trySemiringSolver where
