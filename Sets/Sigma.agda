@@ -62,4 +62,6 @@ from-injection {x ∷ xs} {[]} ()
 from-injection {x ∷ xs} {y ∷ ys} r = cong (_∷_ tt) (from-injection (lemm r))
 
 from-surjection : ∀ (n : ℕ) → Σ (List ⊤) (_≡_ n ∘ fromList)
-from-surjection n = {!!}
+from-surjection zero = [] , refl
+from-surjection (suc n) with from-surjection n
+from-surjection (suc n) | a , b = (tt ∷ a) , cong suc b
