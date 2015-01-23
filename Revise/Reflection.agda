@@ -32,3 +32,9 @@ module _ {A : Set} where
   ~-refl {xs = []} = zero
   ~-refl {xs = _ ∷ []} = suc zero
   ~-refl {xs = _ ∷ _ ∷ xs} = exch ∘ exch
+
+  ~-sym : ∀ {n} {xs ys : V n} → xs ~ ys → ys ~ xs
+  ~-sym zero = zero
+  ~-sym (suc p) = suc (~-sym p)
+  ~-sym (p ∘ p₁) = ~-sym p₁ ∘ ~-sym p
+  ~-sym exch = exch
